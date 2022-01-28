@@ -53,6 +53,11 @@
             @change="() => (u.passwordChange = true)"
           ></a-input>
         </div>
+        <!-- <div class="item">
+          <a-input
+            v-model:value="u.mobilePhone"
+          ></a-input>
+        </div> -->
         <div class="item">
           <a-button @click="update(u, 'update')">确定</a-button>
         </div>
