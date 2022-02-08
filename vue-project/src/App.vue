@@ -1,293 +1,175 @@
 <template>
-  <!-- using for minimap
-    http://patorjk.com/software/taag/#p=display&f=Roman&t=code
-
-                          .                                          oooo                .             
-                        .o8                                          `888              .o8             
-                      .o888oo  .ooooo.  ooo. .oo.  .oo.   oo.ooooo.   888   .oooo.   .o888oo  .ooooo.  
-                        888   d88' `88b `888P"Y88bP"Y88b   888' `88b  888  `P  )88b    888   d88' `88b 
-                        888   888ooo888  888   888   888   888   888  888   .oP"888    888   888ooo888 
-                        888 . 888    .o  888   888   888   888   888  888  d8(  888    888 . 888    .o 
-                        "888" `Y8bod8P' o888o o888o o888o  888bod8P' o888o `Y888""8o   "888" `Y8bod8P' 
-                                                          888                                         
-                                                          o888o                                        
-  ============================================================================================================
-
-  -->
-  <div class="app-entry">
-    <div class="login">
-      <div class="field">
-        <a-input
-          v-model:value="user"
-          class="username"
-          placeholder="请输入用户名"
-        ></a-input>
+  <div style="background: #c3dff1;">
+    <div class="left-page">
+      <div style="height: 80px; width: 100%">
+        <a-image
+          src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0530%252Ff6edf0a2j00qtvxya000cc000hs00ckc.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1646807044&t=5a7b75520cd219996f97fbbecd60bc05"
+          style="width: 100%;height: 80px"></a-image>
       </div>
-      <div class="field">
-        <a-input
-          type="password"
-          v-model:value="cert"
-          class="password"
-          placeholder="请输入口令"
-        ></a-input>
+      <div class="menu">
+        <a-menu
+          v-model:openKeys="openKeys"
+          v-model:selectedKeys="selectedKeys"
+          style="background-color: #cce0ee; width: 100%"
+          :mode="mode"
+          :theme="theme">
+
+          <a-sub-menu
+            key="sub1"
+            style="background-color: #cce0ee">
+
+            <template #icon>
+              <home-outlined />
+            </template>
+            <template #title>站点首页</template>
+            <a-menu-item key="1" @click="Gohome">学会概况</a-menu-item>
+            <a-menu-item key="2">站点导航</a-menu-item>
+          </a-sub-menu>
+          <a-sub-menu key="sub2">
+            <template #icon>
+              <user-add-outlined />
+            </template>
+            <template #title>入会申请</template>
+            <a-menu-item key="3">提交申请</a-menu-item>
+            <a-menu-item key="4">申请状态</a-menu-item>
+          </a-sub-menu>
+          <a-sub-menu key="sub3">
+            <template #icon>
+              <book-outlined />
+            </template>
+            <template #title>在线学习</template>
+            <a-menu-item key="5" @click="Readarticle">浏览文章</a-menu-item>
+            <a-menu-item key="6">发布文章</a-menu-item>
+            <a-menu-item key="7">发布视频</a-menu-item>
+          </a-sub-menu>
+        </a-menu>
       </div>
-      <div class="btn-wrapper">
-        <a-button @click="login" class="btn-login" type="primary"
-          >登录</a-button
-        >
-        <a-button @click="register" class="btn-cancel" type="primary"
-          >注册</a-button
-        >
+    </div>
+    <div class="right-page">
+      <div class="head">
+        <div style="float: left">
+          <h1 class="title">欧美学生会</h1>
+        </div>
+        <div style="float: right">
+          <a-input-search
+            v-model:value="value"
+            placeholder="input search text"
+            enter-button
+            @search="onSearch"
+            style="padding-top: 25px;padding-right: 15px"
+          ></a-input-search>
+        </div>
+        <div style="float: right">
+          <router-link to="/login">
+            <a-button style="border-radius: 30px;width: 120px;margin-right: 20px">
+              登录/注册
+            </a-button>
+          </router-link>
+        </div>
+      </div>
+      <div class="page">
+        <div>
+          <router-view>
+
+          </router-view>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
-/* using for minimap
-  ===============================================================================    
-                                  .               oooo            
-                                .o8               `888            
-                      .oooo.o .o888oo oooo    ooo  888   .ooooo.  
-                      d88(  "8   888    `88.  .8'   888  d88' `88b 
-                      `"Y88b.    888     `88..8'    888  888ooo888 
-                      o.  )88b   888 .    `888'     888  888    .o 
-                      8oo888P'   "888"     .8'     o888o `Y8bod8P' 
-                                      .o..P'                      
-                                      `Y8P'      
-  ===============================================================================                                      
-*/
-.app-entry {
-  .login {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
+.right-page {
+  float: right;
+  width: 85%;
+}
 
-    padding-top: 6em;
-    .field {
-      padding: 0.5em;
-      .username,
-      .password {
-        width: 16em;
-      }
-    }
-    .btn-wrapper {
-      .btn-login {
-        width: 8em;
-      }
-      .btn-cancel {
-        width: 8em;
-      }
-    }
-  }
+.head {
+  line-height: 80px;
+  height: 80px;
+  //width: 1260px;
+  background: #1E98D7;
+}
+
+.title {
+  margin-left: 15px;
+  width: auto;
+}
+
+.page {
+  clear: both;
+}
+
+.left-page {
+  float: left;
+  width: 15%;
+}
+
+.menu {
+  width: 95%;
+  height: 1000px;
+  background: #cce0ee;
+  //clear: both;
 }
 </style>
 
 <script lang="ts">
-/* using for minimap
-  ===============================================================================    
-                                               .o8            
-                                              "888            
-                      .ooooo.   .ooooo.   .oooo888   .ooooo.  
-                      d88' `"Y8 d88' `88b d88' `888  d88' `88b 
-                      888       888   888 888   888  888ooo888 
-                      888   .o8 888   888 888   888  888    .o 
-                      `Y8bod8P' `Y8bod8P' `Y8bod88P" `Y8bod8P'        
-
-  ===============================================================================
- */
-
 // https://www.jianshu.com/p/d3ffec2a3a0b
+import { defineComponent, reactive, toRefs, ref } from "vue";
 import {
-  defineComponent,
-  onBeforeMount,
-  onMounted,
-  onBeforeUpdate,
-  onUpdated,
-  onBeforeUnmount,
-  onUnmounted,
-  onActivated,
-  onDeactivated,
-  onErrorCaptured,
-  onServerPrefetch,
-  onScopeDispose,
-  onRenderTracked,
-  onRenderTriggered,
-  reactive,
-  watch,
-  ref,
-} from "vue";
-import { message } from "ant-design-vue";
+  MailOutlined,
+  CalendarOutlined,
+  AppstoreOutlined,
+  SettingOutlined
+} from "@ant-design/icons-vue";
+import type { MenuMode, MenuTheme } from "ant-design-vue";
+import router from "@/router";
 
 export default defineComponent({
-  name: "VueComponentSkeleton",
-
-  components: {},
-
-  props: { title: { type: String, default: "" } },
-
-  computed: {
-    // 计算属性
-  },
-  watch: {
-    // 数据监听
+  components: {
+    MailOutlined,
+    CalendarOutlined,
+    AppstoreOutlined,
+    SettingOutlined
   },
   setup() {
-    console.log("setup");
-    onRenderTracked((e) => {
-      // onRenderTracked函数——状态追踪
-      // 它会追踪页面上**所有**响应式变量和方法的状态，即我们在setup中return出去的值，
-      // 一旦页面有更新，他都会进行追踪，然后生成一个event对象，我们通过event对象来查找程序的问题所在
-      // - key 那边变量发生了变化
-      // - newValue 更新后变量的值
-      // - oldValue 更新前变量的值
-      // - target 目前页面中的响应变量和函数
-      console.log("onRenderTracked", e);
-    });
 
-    onRenderTriggered((e) => {
-      // 它不像onRenderTracked函数，这个函数不会跟踪所有值的变化，而是给你变化值的信息，并
-      // 且新值和旧值都会给你明确的展示出来
-      // - key 那边变量发生了变化
-      // - newValue 更新后变量的值
-      // - oldValue 更新前变量的值
-      // - target 目前页面中的响应变量和函数
-      console.log("onRenderTriggered", e);
-    });
+    const value = ref<string>("");
 
-    onBeforeMount(() => {
-      // 在挂载开始之前被调用：相关的 render 函数首次被调用。
-      console.log("onBeforeMount");
-    });
-    onMounted(() => {
-      console.log("onMounted");
-    });
-    onBeforeUpdate(() => {
-      // 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。 你可以
-      // 在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。
-      console.log("onBeforeUpdate");
-    });
-    onUpdated(() => {
-      // 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
-      // 当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。
-      // 然而在大多数情况下，你应该避免在此期间更改状态，因为这可能会导致更新无限循环
-      console.log("onUpdated");
-    });
-    onBeforeUnmount(() => {
-      // 实例销毁之前调用。在这一步，实例仍然完全可用。
-      console.log("onBeforeUnmount");
-    });
-    onUnmounted(() => {
-      // Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事
-      // 件监听器会被移除，所有的子实例也会被销毁。 该钩子在服务器端渲染期间不被调用。
-      console.log("onUnmounted");
-    });
-    onActivated(() => {
-      // 激活<keep-alive>组件时
-      console.log("onActivated");
-    });
-    onDeactivated(() => {
-      // 离开<keep-alive>组件时
-      console.log("onDeactivated");
-    });
-    onErrorCaptured(() => {
-      // 当捕获一个来自子孙组件的异常时激活钩子函数
-      console.log("onErrorCaptured");
-    });
-    onServerPrefetch(() => {
-      console.log("onServerPrefetch");
-    });
-    onScopeDispose(() => {
-      console.log("onScopeDispose");
-    });
+    const onSearch = (searchValue: string) => {
+      console.log("use value", searchValue);
+      console.log("or use this.value", value.value);
+    };
 
-    const counter = ref(0);
-    watch(counter, (newValue, oldValue) => {
-      if (+newValue !== 6) {
-        return;
-      }
 
-      console.log("it is 6");
+    const state = reactive({
+      mode: "inline" as MenuMode,
+      theme: "light" as MenuTheme,
+      selectedKeys: ["1"],
+      openKeys: ["sub1"]
     });
-
-    return reactive({
-      greeting: "hello",
-      name: "",
-      gender: "",
-      counter,
-      user: "",
-      cert: "",
-    });
+    const changeMode = (checked: boolean) => {
+      state.mode = checked ? "vertical" : "inline";
+    };
+    const changeTheme = (checked: boolean) => {
+      state.theme = checked ? "dark" : "light";
+    };
+    return {
+      value,
+      onSearch,
+      ...toRefs(state),
+      changeMode,
+      changeTheme
+    };
   },
-
-  beforeCreate() {
-    // 在实例初始化之后，数据观测(data observer) 和 event/watcher 事件配置之前被调用。
-    console.log("beforeCreate");
-  },
-
-  created() {
-    // 实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，
-    //  属性和方法的运算， watch/event 事件回调。然而，挂载阶段还没开始，$el 属性目前不可见。
-    console.log("created");
-  },
-
   methods: {
-    // 方法定义
-    trial() {
-      console.log("trial");
+    Gohome(){
+      router.push('/home');
     },
-    login() {
-      let url = "/api/login";
-
-      fetch(url, {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-        redirect: "follow",
-        body: JSON.stringify({
-          user: this.user,
-          cert: this.cert,
-        }),
-      })
-        .then((result) => {
-          console.log(result);
-          return result.json();
-        })
-        .then((result) => {
-          if (!result) {
-            message.error("null response");
-            return;
-          }
-          if (result.status !== 0) {
-            message.success(result.msg);
-            return;
-          }
-          message.success("登录成功");
-        })
-        .catch((err) => {
-          console.log(err);
-          message.error(err);
-        });
+    Readarticle() {
+      router.push('/article')
+      console.log("Hello");
     },
-    register: function () {
-      let url = "api/register";
-      fetch(url, {
-        method: "POST",
-        //JSON.stringify()函数将一个对象或值转换成json字符串
-        body: JSON.stringify({
-          user: "L",
-          name: "zd",
-        }),
-      }).then((result) => {
-        //result为一个Response对象
-        console.log(result);
-      });
-    },
-  },
+  }
 });
 </script>
