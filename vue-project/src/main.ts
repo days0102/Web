@@ -18,6 +18,20 @@ import antDesign from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 import * as antIcons from "@ant-design/icons-vue";
 
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+//富文本编辑器
+// @ts-ignore
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+
+
 
 const app = createApp(App);
 
@@ -27,6 +41,9 @@ app.use(router);
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 app.use(antDesign);
+app.use(VueAxios, axios);
+app.use(VueQuillEditor)
+app.use(ElementPlus)
 
 const icons: any = antIcons;
 for (const i in icons) {

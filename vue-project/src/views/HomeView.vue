@@ -7,13 +7,28 @@
     <div><a-image src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F59%2F52%2F02%2F595202f509d9646250e024be7cacfd7f.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1646821682&t=41f123628caec8834a4e04ade9df7d0b" /></div>
   </a-carousel>
   </div>
+  <div :style="{ width: '300px', border: '1px solid #d9d9d9', borderRadius: '4px'}" style="margin-top: 15px">
+    <a-calendar v-model:value="value" :fullscreen="false" @panelChange="onPanelChange" />
+  </div>
 </template>
 
-<script>
-// export default {
-//   name: "HomeView.vue"
-// };
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { Dayjs } from 'dayjs';
 
+export default defineComponent({
+  setup() {
+    const value = ref<Dayjs>();
+    const onPanelChange = (value: Dayjs, mode: string) => {
+      console.log(value, mode);
+    };
+
+    return {
+      value,
+      onPanelChange,
+    };
+  },
+});
 </script>
 
 <style lang="less" scoped>

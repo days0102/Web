@@ -177,30 +177,6 @@ export default defineComponent({
     },
     goto(url: any) {
       router.push(url);
-    },
-    register() {
-      //alert("注册");
-
-      let url = "/api/register";
-      fetch(url, {
-        method: "POST",
-        //JSON.stringify()函数将一个对象或值转换成json字符串
-        body: JSON.stringify({
-          user: this.user,
-          cert: this.cert
-        })
-      })
-        .then((result) => {
-          //result为一个Response对象
-          return result.json();
-        })
-        .then((result) => {
-          if (result.status !== 0) {
-            message.warn(result.msg);
-            return;
-          }
-          message.success(result.msg);
-        });
     }
   }
 });

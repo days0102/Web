@@ -1,7 +1,12 @@
 <template>
   <div style="background: #c3dff1;">
     <div class="left-page">
-      <div style="height: 80px; width: 100%">
+      <div style="height: 80px; width: 100%; text-align: center">
+<!--          <a-avatar :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }">-->
+<!--            <template #icon>-->
+<!--              <AntDesignOutlined />-->
+<!--            </template>-->
+<!--          </a-avatar>-->
         <a-image
           src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0530%252Ff6edf0a2j00qtvxya000cc000hs00ckc.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1646807044&t=5a7b75520cd219996f97fbbecd60bc05"
           style="width: 100%;height: 80px"></a-image>
@@ -39,7 +44,7 @@
             </template>
             <template #title>在线学习</template>
             <a-menu-item key="5" @click="Readarticle">浏览文章</a-menu-item>
-            <a-menu-item key="6">发布文章</a-menu-item>
+            <a-menu-item key="6" @click="CreateArticle">发布文章</a-menu-item>
             <a-menu-item key="7">发布视频</a-menu-item>
           </a-sub-menu>
         </a-menu>
@@ -48,7 +53,7 @@
     <div class="right-page">
       <div class="head">
         <div style="float: left">
-          <h1 class="title">欧美学生会</h1>
+          <h1 class="title" style="color: whitesmoke; font-size: xx-large">欧美学生会</h1>
         </div>
         <div style="float: right">
           <a-input-search
@@ -107,7 +112,7 @@
 
 .menu {
   width: 95%;
-  height: 1000px;
+  height: 650px;
   background: #cce0ee;
   //clear: both;
 }
@@ -120,13 +125,18 @@ import {
   MailOutlined,
   CalendarOutlined,
   AppstoreOutlined,
-  SettingOutlined
+  SettingOutlined,
+  //头像
+  AntDesignOutlined
 } from "@ant-design/icons-vue";
 import type { MenuMode, MenuTheme } from "ant-design-vue";
 import router from "@/router";
 
 export default defineComponent({
   components: {
+    //头像
+    AntDesignOutlined,
+
     MailOutlined,
     CalendarOutlined,
     AppstoreOutlined,
@@ -163,13 +173,16 @@ export default defineComponent({
     };
   },
   methods: {
-    Gohome(){
-      router.push('/home');
+    Gohome() {
+      router.push("/home");
     },
     Readarticle() {
-      router.push('/article')
+      router.push("/article");
       console.log("Hello");
     },
+    CreateArticle(){
+      router.push("/create");
+    }
   }
 });
 </script>
