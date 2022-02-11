@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #c3dff1;">
+  <div style="background: #ffffff;">
     <div class="left-page">
       <div style="height: 80px; width: 100%; text-align: center">
 <!--          <a-avatar :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }">-->
@@ -7,21 +7,33 @@
 <!--              <AntDesignOutlined />-->
 <!--            </template>-->
 <!--          </a-avatar>-->
-        <a-image
-          src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0530%252Ff6edf0a2j00qtvxya000cc000hs00ckc.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1646807044&t=5a7b75520cd219996f97fbbecd60bc05"
-          style="width: 100%;height: 80px"></a-image>
+
+        <div>
+          <a-avatar v-if="loginFlag" :size="32" :src="avatar" style="margin-top: 3px">
+            <template #icon><AntDesignOutlined /></template>
+          </a-avatar>
+          <a-image v-else
+            src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0530%252Ff6edf0a2j00qtvxya000cc000hs00ckc.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1646807044&t=5a7b75520cd219996f97fbbecd60bc05"
+            style="width: 100%;height: 80px"></a-image>
+        </div>
+        <div>
+          <p style="margin: 0">{{account}}</p>
+        </div>
+        <div style="margin-top: 5px;">
+          <a-button v-if="loginFlag" danger :size="small" style=";padding:0 8px;border-radius: 8px;font-size: 12px;height: 22px;line-height: 22px" @click="logout">退出</a-button>
+        </div>
       </div>
-      <div class="menu">
+      <div class="menu" style="border-radius: 8px">
         <a-menu
           v-model:openKeys="openKeys"
           v-model:selectedKeys="selectedKeys"
-          style="background-color: #cce0ee; width: 100%"
+          style="background-color: #f7f8fa; width: 100%"
           :mode="mode"
           :theme="theme">
 
           <a-sub-menu
             key="sub1"
-            style="background-color: #cce0ee">
+            style="background-color: #f7f8fa">
 
             <template #icon>
               <home-outlined />
@@ -51,9 +63,21 @@
       </div>
     </div>
     <div class="right-page">
-      <div class="head">
-        <div style="float: left">
-          <h1 class="title" style="color: whitesmoke; font-size: xx-large">欧美学生会</h1>
+      <div class="head" style="border-radius: 5px;margin-right: 5px;margin-top: 5px">
+        <div style="float: left;padding-left: 15px">
+          <h1 class="title" style="color: whitesmoke; font-size: xx-large;letter-spacing: 3px;font-weight: bold">欧美学生会</h1>
+        </div>
+        <div v-if="loginFlag" style="float: right;margin-right: 10px">
+          <a-avatar :size="40" :src="avatar">
+<!--            <template #icon><UserOutlined /></template>-->
+          </a-avatar>
+        </div>
+        <div v-else style="float: right">
+          <router-link to="/login">
+            <a-button style="border-radius: 30px;width: 120px;margin-right: 20px">
+              登录/注册
+            </a-button>
+          </router-link>
         </div>
         <div style="float: right">
           <a-input-search
@@ -64,22 +88,16 @@
             style="padding-top: 25px;padding-right: 15px"
           ></a-input-search>
         </div>
-        <div style="float: right">
-          <router-link to="/login">
-            <a-button style="border-radius: 30px;width: 120px;margin-right: 20px">
-              登录/注册
-            </a-button>
-          </router-link>
-        </div>
       </div>
       <div class="page">
         <div>
-          <router-view>
+          <router-view v-if="isRouterAlive">
 
           </router-view>
         </div>
       </div>
     </div>
+    <div style="clear: both"></div>
   </div>
 </template>
 
@@ -93,7 +111,7 @@
   line-height: 80px;
   height: 80px;
   //width: 1260px;
-  background: #1E98D7;
+  background:black;
 }
 
 .title {
@@ -111,9 +129,10 @@
 }
 
 .menu {
+  margin-top: 20px;
   width: 95%;
   height: 650px;
-  background: #cce0ee;
+  background: #ffffff;
   //clear: both;
 }
 </style>
@@ -132,7 +151,14 @@ import {
 import type { MenuMode, MenuTheme } from "ant-design-vue";
 import router from "@/router";
 
+let loginFlag=false
+let avatar=""
+let account=""
+
 export default defineComponent({
+  loginFlag,
+  avatar,
+  account,
   components: {
     //头像
     AntDesignOutlined,
@@ -169,11 +195,37 @@ export default defineComponent({
       onSearch,
       ...toRefs(state),
       changeMode,
-      changeTheme
+      changeTheme,
     };
   },
+  provide(){
+    return{
+      reload: this.reload
+    }
+  },
+  data(){
+    return{
+      loginFlag:false,
+      avatar:"",
+      account,
+      isRouterAlive:true
+    }
+  },
   methods: {
+    logout(){
+      loginFlag=false
+      account=""
+      avatar=""
+      this.$router.go(0)
+    },
+    reload(){
+      this.isRouterAlive=false
+      this.$nextTick(function(){
+        this.isRouterAlive=true
+      })
+    },
     Gohome() {
+      console.log(loginFlag)
       router.push("/home");
     },
     Readarticle() {

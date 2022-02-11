@@ -40,14 +40,19 @@ const router = createRouter({
       component:()=>import('../views/ArticlesView.vue')
     },
     {
-      path:'/article/detail',
+      path:'/detail/:id',
       name:'detail',
       component:()=>import('../views/ArticleDetail.vue')
     },
     {
-      path:'/create',
+      path:'/create/',
       name:'create',
       component:()=>import('../views/ArticleView.vue')
+    },
+    {
+      path:'/blank',
+      name:'blank',
+      component:()=>import('../views/BlankView.vue')
     }
   ]
 })

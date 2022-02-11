@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
 
-    <el-card v-for="article in articles" :body-style="{padding: '0px'}" class="home-main-column-middle-card">
+    <el-card v-for="article in articles" :body-style="{padding: '5px'}" class="home-main-column-middle-card">
       <div class="home-title" style="text-align: left">
         <span style="float: left">
           <a-avatar :size="64" :src=article.avatar>
@@ -9,9 +9,9 @@
           </a-avatar>
         </span>
         <span style="float: left;padding-left: 15px">
-          <router-link to="/article/detail">
-            <h2 style="color: blue;margin-bottom: 5px">{{ article.title }}</h2>
-          </router-link>
+
+            <h2 @click="toLink(article.id)" style="color: blue;margin-bottom: 5px">{{ article.title }}</h2>
+
           <p style="color: #a6a8a8; font-size: small;">
             <span style="margin-right: 15px">创建时间:{{ article.create_at["Time"] }}</span>
             <span style="margin-right: 15px">更新时间:{{ article.update_at["Time"] }}</span>
@@ -59,8 +59,6 @@
       >
       </el-pagination>
     </div>
-
-
   </div>
 </template>
 
@@ -69,9 +67,12 @@
 import { defineComponent } from "vue";
 import { StarOutlined, LikeOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons-vue";
 
+import { RouterLinkStub } from "@vue/test-utils";
+
 export default defineComponent({
   name: "ListArticle.vue",
   components: {
+    RouterLinkStub,
     StarOutlined,
     LikeOutlined,
     MessageOutlined,
@@ -89,10 +90,14 @@ export default defineComponent({
     };
   },
   methods: {
-
+    toLink(id){
+      this.$router.push({
+        path:'/detail/'+id,
+      })
+    },
     //分页获取博客
     getData() {
-      this.axios.get("/api/test").then((response) => {
+      this.axios.get("/api/article").then((response) => {
         //console.log(response)
         console.log(response.data.articles)
         this.total = (response.data.articles).length;
