@@ -1,7 +1,17 @@
 <template>
-  <div style="background-color: antiquewhite">
-    <h1 style="text-align: center">Detail</h1>
-    <h2 style="text-align: center">{{ $route.params }}</h2>
+  <div style="background-color: antiquewhite; text-align: center">
+<!--    <h1 style="text-align: center">Detail</h1>-->
+<!--    <h2 style="text-align: center">{{ $route.params }}</h2>-->
+
+<!--    <template v-if="flag">-->
+<!--      <div class="example">-->
+<!--        <a-spin size="large"/>-->
+<!--      </div>-->
+<!--    </template>-->
+<!--    <template v-else>-->
+    <h1 style="text-align: center;">{{this.article.title}}</h1>
+    <p style="text-align: center;font-size: x-large">{{this.article.content}}</p>
+<!--    </template>-->
   </div>
   <!--  <div style="background-color: aquamarine">-->
   <!--    <h1 style="text-align: center">Details</h1>-->
@@ -179,7 +189,14 @@ export default defineComponent({
     };
   },
   data(){
+    let article={
+      title:"",
+      content:""
+    }
+    //let flag:boolean
     return{
+      //flag:true,
+      article,
       like:0,
       dislike:0
     }
@@ -187,6 +204,7 @@ export default defineComponent({
   created() {
     //console.log(login)
     this.getComments();
+    this.getArticle();
   },
   methods: {
     deleteComment(id:number){
@@ -267,6 +285,17 @@ export default defineComponent({
       //   method:'post',
       //
       // })
+    },
+    getArticle(){
+      this.axios.post("/api/article",{
+        id:this.$route.params.id
+      }).then((res)=>{
+        if(res.data.status==0) {
+          console.log(res.data)
+          this.article = res.data.articles[0]
+          //this.flag=false
+        }
+      })
     },
     back(){
       this.$router.push("/article");

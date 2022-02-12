@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
 
-    <el-card v-for="article in articles" :body-style="{padding: '5px'}" class="home-main-column-middle-card">
+    <el-card v-for="article in pageArticle" :body-style="{padding: '5px'}" class="home-main-column-middle-card">
       <div class="home-title" style="text-align: left">
         <span style="float: left">
           <a-avatar :size="64" :src=article.avatar>
@@ -22,7 +22,7 @@
       <div style="width: 20%; float: left;border-radius: 8px;overflow: hidden;max-height: 150px">
         <img :src=article.figure class="image" style="width: 100%;height: auto" />
       </div>
-      <div style="font-size: small;width: 75%;float: left; margin-left: 15px;">
+      <div style="font-size: 14px;width: 75%;float: left; margin-left: 15px;">
         <h3 style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;">{{ article.description }}</h3>
         <p style="margin-top: 10px">
           <span v-if="like" style="margin-right: 15px">
@@ -50,21 +50,28 @@
       <!--      </div>-->
     </el-card>
 
-    <div v-if="pageShow" class="home-page">
-      <el-pagination :current-page=currentPage
-                     :page-size=pageSize
-                     :total="total"
-                     background
-                     layout="prev, pager, next"
+    <div style="float: right;margin-bottom: 30px;margin-right: 20px">
+      <el-pagination
+        v-model:currentPage="currentPage"
+        :page-size="pageSize"
+        :small="false"
+        :disabled="false"
+        :background="true"
+        layout="total, prev, pager, next"
+        :total="total"
+        hide-on-single-page="hide-on-single-page"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       >
       </el-pagination>
+
     </div>
   </div>
 </template>
 
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { StarOutlined, LikeOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons-vue";
 
 import { RouterLinkStub } from "@vue/test-utils";
@@ -78,9 +85,14 @@ export default defineComponent({
     MessageOutlined,
     UserOutlined
   },
+  setup() {
+    return {
+    };
+  },
   data() {
     return {
       articles: [],
+      pageArticle:[],
       currentPage: 1,
       total: 0,
       pageSize: 3,
@@ -90,18 +102,36 @@ export default defineComponent({
     };
   },
   methods: {
+    handleSizeChange(){
+
+    },
+    handleCurrentChange(newCurrentPage){
+      this.currentPage=newCurrentPage
+      // console.log("new:"+newCurrentPage)
+      let left=(this.currentPage-1)*3
+      let right=(this.currentPage-1)*3+3
+      if(right<this.total){
+        this.pageArticle=this.articles.slice(left,right)
+      }
+      else{
+        this.pageArticle=this.articles.slice(left,this.total)
+      }
+      console.log(this.pageArticle)
+    },
     toLink(id){
       this.$router.push({
         path:'/detail/'+id,
       })
     },
-    //分页获取博客
     getData() {
-      this.axios.get("/api/article").then((response) => {
+      this.axios.get("/api/articles").then((response) => {
         //console.log(response)
-        console.log(response.data.articles)
-        this.total = (response.data.articles).length;
-        this.articles = response.data.articles;
+        if(response.data.status==0) {
+          console.log(response.data.articles)
+          this.total = (response.data.articles).length;
+          this.articles = response.data.articles;
+          this.pageArticle = this.articles.slice(0, (this.pageSize < this.total ? this.pageSize : this.total))
+        }
       });
     }
   },
