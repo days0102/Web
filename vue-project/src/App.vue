@@ -58,6 +58,7 @@
             <a-menu-item key="5" @click="Readarticle">浏览文章</a-menu-item>
             <a-menu-item key="6" @click="CreateArticle">发布文章</a-menu-item>
             <a-menu-item key="7">发布视频</a-menu-item>
+            <a-menu-item key="8">内容管理</a-menu-item>
           </a-sub-menu>
         </a-menu>
       </div>

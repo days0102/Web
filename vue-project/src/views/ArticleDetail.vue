@@ -71,6 +71,9 @@
             评论时间:{{ comment.create_at["Time"] }}
           </span>
         </span>
+        <span v-if="comment.oneself" style="float: right">
+          <a-button @click="deleteComment(comment.id)" type="dashed" danger style="font-size: small;" size="small">删除</a-button>
+        </span>
         <span style="clear: both"></span>
     </span>
     <div style="font-size: small;width: 75%;float: left; margin-left: 15px;">
@@ -186,6 +189,17 @@ export default defineComponent({
     this.getComments();
   },
   methods: {
+    deleteComment(id:number){
+      //console.log(id)
+      this.axios.post("/api/comment/delete",{
+        id:id
+      }).then((res)=>{
+        if(res.data.status==0){
+          //@ts-ignore
+          this.reload()
+        }
+      })
+    },
     postComment(){
       console.log(this.value)
       if(this.value==""){
@@ -207,7 +221,7 @@ export default defineComponent({
         likes:0,
         comments:0
       }).then((response) => {
-        console.log(response.data)
+        //console.log(response.data)
         if(response.data.status==0){
           //@ts-ignore
           this.reload()
@@ -235,6 +249,17 @@ export default defineComponent({
             //console.log("Comment");
             //console.log(response.data);
             this.comments = response.data.comments;
+            for(let i=0;i<this.comments.length;i++){
+              //@ts-ignore
+              if(this.comments[i].create_by==this.$root.account){
+                //@ts-ignore
+                this.comments[i].oneself=1
+              }
+              else{
+                //@ts-ignore
+                this.comments[i].oneself=0
+              }
+            }
           }
         }
       });
