@@ -65,7 +65,7 @@
     </div>
     <div class="right-page">
       <div class="head" style="border-radius: 5px;margin-right: 5px;margin-top: 5px">
-        <div style="float: left;padding-left: 15px">
+        <div style="float: left;padding-left: 8px">
           <h1 class="title" style="color: whitesmoke; font-size: xx-large;letter-spacing: 3px;font-weight: bold">欧美学生会</h1>
         </div>
         <div v-if="loginFlag" style="float: right;margin-right: 10px">
@@ -75,20 +75,20 @@
         </div>
         <div v-else style="float: right">
           <router-link to="/login">
-            <a-button style="border-radius: 30px;width: 120px;margin-right: 20px">
+            <a-button style="border-radius: 30px;width: 100px;margin-right: 15px">
               登录/注册
             </a-button>
           </router-link>
         </div>
-        <div style="float: right">
-          <a-input-search
-            v-model:value="value"
-            placeholder="input search text"
-            enter-button
-            @search="onSearch"
-            style="padding-top: 25px;padding-right: 15px"
-          ></a-input-search>
-        </div>
+<!--        <div style="float: right">-->
+<!--          <a-input-search-->
+<!--            v-model:value="value"-->
+<!--            placeholder="input search text"-->
+<!--            enter-button-->
+<!--            @search="onSearch"-->
+<!--            style="padding-top: 25px;padding-right: 15px"-->
+<!--          ></a-input-search>-->
+<!--        </div>-->
       </div>
       <div class="page">
         <div>
@@ -209,7 +209,24 @@ export default defineComponent({
       loginFlag:false,
       avatar:"",
       account,
-      isRouterAlive:true
+      isRouterAlive:true,
+      screenWidth:document.body.clientWidth
+    }
+  },
+  mounted() {
+
+    window.onresize = () => {
+      return (() => {
+        this.screenWidth = document.body.clientWidth
+      })()
+    }
+  },
+  watch:{
+    screenWidth(){
+      console.log(this.screenWidth)
+      if(this.screenWidth<1025){
+        console.log("<1025")
+      }
     }
   },
   methods: {

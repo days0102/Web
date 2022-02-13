@@ -9,8 +9,9 @@
 <!--      </div>-->
 <!--    </template>-->
 <!--    <template v-else>-->
-    <h1 style="text-align: center;">{{this.article.title}}</h1>
+    <h1 style="text-align: center;" >{{this.article.title}}</h1>
     <p style="text-align: center;font-size: x-large">{{this.article.content}}</p>
+    <a-textarea style="font-size: x-large;background-color: antiquewhite"  readonly="readonly" v-model:value="this.article.content" placeholder="1~200字" :rows="auto" />
 <!--    </template>-->
   </div>
   <!--  <div style="background-color: aquamarine">-->
@@ -122,8 +123,8 @@
 <!--            <template #icon><UserOutlined /></template>-->
       </a-avatar>
     </div>
-    <div style="float: left;padding-left: 15px;width: 80%">
-      <a-textarea v-model:value="value" placeholder="Basic usage" :rows="4" />
+    <div style="float: left;padding-left: 15px;width: 85%">
+      <a-textarea v-model:value="value" placeholder="1~200字" :rows="4" />
     </div>
     <div style="float: left;">
       <div>
@@ -201,10 +202,14 @@ export default defineComponent({
       dislike:0
     }
   },
-  created() {
+  async created() {
     //console.log(login)
-    this.getComments();
-    this.getArticle();
+    await this.getComments();
+    // await this.getArticle();
+
+  },
+  mounted(){
+
   },
   methods: {
     deleteComment(id:number){
@@ -255,17 +260,19 @@ export default defineComponent({
         }
       })
     },
-    getComments() {
+    async getComments() {
+
       //console.log(this.$route.params);
       this.axios.post("/api/comment", {
         id: this.$route.params.id
       }).then((response) => {
+        // console.log("GetComment")
         //console.log(response.data);
         if (response.data.status == 0) {
-          //console.log(response)
+          // console.log(response.data)
           if (response.data.comments != null) {
             //console.log("Comment");
-            //console.log(response.data);
+            // console.log(response.data.comments);
             this.comments = response.data.comments;
             for(let i=0;i<this.comments.length;i++){
               //@ts-ignore
@@ -279,6 +286,9 @@ export default defineComponent({
               }
             }
           }
+          if(response.data.articles!=null){
+            this.article = response.data.articles[0]
+          }
         }
       });
       // fetch("/api/comment",{
@@ -286,12 +296,14 @@ export default defineComponent({
       //
       // })
     },
-    getArticle(){
+    async getArticle(){
+
       this.axios.post("/api/article",{
         id:this.$route.params.id
       }).then((res)=>{
+        console.log("getArticle")
         if(res.data.status==0) {
-          console.log(res.data)
+          //console.log(res.data)
           this.article = res.data.articles[0]
           //this.flag=false
         }

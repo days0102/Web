@@ -20,7 +20,8 @@
     "vue": "^3.2.27",
     "vue-axios": "^3.4.1",
     "vue-quill-editor": "^3.0.6",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "wangeditor": "^4.7.11"
   },
   "devDependencies": {
     "@ant-design/icons-vue": "^6.0.1",

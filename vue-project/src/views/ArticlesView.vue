@@ -23,20 +23,22 @@
         <img :src=article.figure class="image" style="width: 100%;height: auto" />
       </div>
       <div style="font-size: 14px;width: 75%;float: left; margin-left: 15px;">
-        <h3 style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;">{{ article.description }}</h3>
+        <h3
+          style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;">
+          {{ article.description }}</h3>
         <p style="margin-top: 10px">
           <span v-if="like" style="margin-right: 15px">
-            <LikeFilled @click="" />{{article.likes}}
+            <LikeFilled @click="" />{{ article.likes }}
           </span>
           <span v-else style="margin-right: 15px;">
-            <LikeOutlined @click="" />{{article.likes}}
+            <LikeOutlined @click="" />{{ article.likes }}
           </span>
 
           <span v-if="dislike" style="margin-right: 15px">
-            <DislikeFilled @click="" />{{article.stars}}
+            <DislikeFilled @click="" />{{ article.stars }}
           </span>
           <span v-else style="margin-right: 15px">
-            <DislikeOutlined @click="" />{{article.stars}}
+            <DislikeOutlined @click="" />{{ article.stars }}
           </span>
 
         </p>
@@ -86,51 +88,52 @@ export default defineComponent({
     UserOutlined
   },
   setup() {
-    return {
-    };
+    return {};
   },
   data() {
     return {
       articles: [],
-      pageArticle:[],
+      pageArticle: [],
       currentPage: 1,
       total: 0,
       pageSize: 3,
       pageShow: 0,
-      like:0,
-      dislike:0,
+      like: 0,
+      dislike: 0
     };
   },
   methods: {
-    handleSizeChange(){
+    handleSizeChange() {
 
     },
-    handleCurrentChange(newCurrentPage){
-      this.currentPage=newCurrentPage
+    handleCurrentChange(newCurrentPage) {
+      this.currentPage = newCurrentPage;
       // console.log("new:"+newCurrentPage)
-      let left=(this.currentPage-1)*3
-      let right=(this.currentPage-1)*3+3
-      if(right<this.total){
-        this.pageArticle=this.articles.slice(left,right)
+      let left = (this.currentPage - 1) * 3;
+      let right = (this.currentPage - 1) * 3 + 3;
+      if (right < this.total) {
+        this.pageArticle = this.articles.slice(left, right);
+      } else {
+        this.pageArticle = this.articles.slice(left, this.total);
       }
-      else{
-        this.pageArticle=this.articles.slice(left,this.total)
-      }
-      console.log(this.pageArticle)
+      //console.log(this.pageArticle);
     },
-    toLink(id){
+    toLink(id) {
       this.$router.push({
-        path:'/detail/'+id,
-      })
+        path: "/detail/" + id
+      });
     },
     getData() {
       this.axios.get("/api/articles").then((response) => {
         //console.log(response)
-        if(response.data.status==0) {
-          console.log(response.data.articles)
-          this.total = (response.data.articles).length;
-          this.articles = response.data.articles;
-          this.pageArticle = this.articles.slice(0, (this.pageSize < this.total ? this.pageSize : this.total))
+        //@ts-ignore
+        if (response.data.status == 0) {
+          console.log(response.data.articles);
+          if (response.data.articles != null) {
+            this.total = (response.data.articles).length;
+            this.articles = response.data.articles;
+            this.pageArticle = this.articles.slice(0, (this.pageSize < this.total ? this.pageSize : this.total));
+          }
         }
       });
     }

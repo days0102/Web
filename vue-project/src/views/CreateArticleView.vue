@@ -1,64 +1,50 @@
 <template>
-  <!-- Two-way Data-Binding -->
-  <quill-editor
-    ref="myQuillEditor"
-    v-model="content"
-    :options="editorOption"
-    @blur="onEditorBlur($event)"
-    @focus="onEditorFocus($event)"
-    @ready="onEditorReady($event)"
-  />
-
-  <!-- Or manually control the data synchronization -->
-  <quill-editor
-    :content="content"
-    :options="editorOption"
-    @change="onEditorChange($event)"
-  />
+  <div class="components-input-demo-size">
+    <a-input style="width: 99%" v-model:value="title" size="large" placeholder="请输入标题" />
+  </div>
+  <div class="components-input-demo-size">
+    <a-textarea style="width: 99%;" v-model:value="description" size="large" placeholder="请输入文章表述" />
+  </div>
+  <div class="components-input-demo-size">
+    <a-textarea style="width: 99%;" v-model:value="content" placeholder="请输入文章内容" :rows="15" />
+  </div>
+  <div>
+    <a-button @click="postArticle">提交</a-button>
+  </div>
 </template>
-
-<script>
-// export default {
-//   name: "CreateArticleView"
-// };
-import { quillEditor } from "vue-quill-editor";
-import Quill from 'quill'
-
-export default {
-  data () {
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+export default defineComponent({
+  setup() {
+    const title = ref<string>('');
+    const description = ref<string>('');
+    const content = ref<string>('');
     return {
-      content: '<h2>I am Example</h2>',
-      editorOption: {
-        // Some Quill options...
+      title,
+      description,
+      content
+    };
+  },
+  methods:{
+    postArticle(){
+      if(this.title!="" && this.description!="" && this.content!=""){
+        this.axios.post("/api/article/create",{
+          title:this.title,
+          description:this.description,
+          content:this.content,
+          //@ts-ignore
+          user:this.$root.account
+        }).then((res)=>{
+          console.log(res)
+        })
       }
     }
-  },
-  methods: {
-    onEditorBlur(quill) {
-      console.log('editor blur!', quill)
-    },
-    onEditorFocus(quill) {
-      console.log('editor focus!', quill)
-    },
-    onEditorReady(quill) {
-      console.log('editor ready!', quill)
-    },
-    onEditorChange({ quill, html, text }) {
-      console.log('editor change!', quill, html, text)
-      this.content = html
-    }
-  },
-  computed: {
-    editor() {
-      return this.$refs.myQuillEditor.quill
-    }
-  },
-  mounted() {
-    console.log('this is current quill instance object', this.editor)
   }
-}
+});
 </script>
-
 <style scoped>
-
+.components-input-demo-size .ant-input {
+  width: 200px;
+  margin: 0 8px 8px 0;
+}
 </style>
