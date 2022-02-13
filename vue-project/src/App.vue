@@ -24,13 +24,54 @@
         </div>
       </div>
       <div class="menu" style="border-radius: 8px">
+<!--        <a-menu-->
+<!--          v-model:openKeys="openKeys"-->
+<!--          v-model:selectedKeys="selectedKeys"-->
+<!--          style="background-color: #f7f8fa; width: 100%"-->
+<!--          :mode="mode"-->
+<!--          :theme="theme"-->
+<!--          :inline-collapsed="collapsed"-->
+<!--        >-->
+
+<!--          <a-sub-menu-->
+<!--            key="sub1"-->
+<!--            style="background-color: #f7f8fa">-->
+
+<!--            <template #icon>-->
+<!--              <home-outlined />-->
+<!--            </template>-->
+<!--            <template #title>站点首页</template>-->
+<!--            <a-menu-item key="1" @click="Gohome">学会概况</a-menu-item>-->
+<!--            <a-menu-item key="2">站点导航</a-menu-item>-->
+<!--          </a-sub-menu>-->
+<!--          <a-sub-menu key="sub2">-->
+<!--            <template #icon>-->
+<!--              <user-add-outlined />-->
+<!--            </template>-->
+<!--            <template #title>入会申请</template>-->
+<!--            <a-menu-item key="3">提交申请</a-menu-item>-->
+<!--            <a-menu-item key="4">申请状态</a-menu-item>-->
+<!--          </a-sub-menu>-->
+<!--          <a-sub-menu key="sub3">-->
+<!--            <template #icon>-->
+<!--              <book-outlined />-->
+<!--            </template>-->
+<!--            <template #title>在线学习</template>-->
+<!--            <a-menu-item key="5" @click="Readarticle">浏览文章</a-menu-item>-->
+<!--            <a-menu-item key="6" @click="CreateArticle">发布文章</a-menu-item>-->
+<!--            <a-menu-item key="7" @click="test">发布视频</a-menu-item>-->
+<!--            <a-menu-item key="8">内容管理</a-menu-item>-->
+<!--          </a-sub-menu>-->
+<!--        </a-menu>-->
+
+
         <a-menu
           v-model:openKeys="openKeys"
           v-model:selectedKeys="selectedKeys"
-          style="background-color: #f7f8fa; width: 100%"
-          :mode="mode"
-          :theme="theme">
-
+          mode="inline"
+          theme="theme"
+          :inline-collapsed="collapsed"
+        >
           <a-sub-menu
             key="sub1"
             style="background-color: #f7f8fa">
@@ -57,7 +98,7 @@
             <template #title>在线学习</template>
             <a-menu-item key="5" @click="Readarticle">浏览文章</a-menu-item>
             <a-menu-item key="6" @click="CreateArticle">发布文章</a-menu-item>
-            <a-menu-item key="7">发布视频</a-menu-item>
+            <a-menu-item key="7" @click="test">发布视频</a-menu-item>
             <a-menu-item key="8">内容管理</a-menu-item>
           </a-sub-menu>
         </a-menu>
@@ -140,14 +181,19 @@
 
 <script lang="ts">
 // https://www.jianshu.com/p/d3ffec2a3a0b
-import { defineComponent, reactive, toRefs, ref } from "vue";
+import { defineComponent, reactive, toRefs, ref, watch } from "vue";
 import {
   MailOutlined,
-  CalendarOutlined,
   AppstoreOutlined,
+  CalendarOutlined,
   SettingOutlined,
   //头像
-  AntDesignOutlined
+  AntDesignOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  PieChartOutlined,
+  DesktopOutlined,
+  InboxOutlined
 } from "@ant-design/icons-vue";
 import type { MenuMode, MenuTheme } from "ant-design-vue";
 import router from "@/router";
@@ -161,12 +207,18 @@ export default defineComponent({
   avatar,
   account,
   components: {
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    PieChartOutlined,
+    MailOutlined,
+    DesktopOutlined,
+    InboxOutlined,
+    AppstoreOutlined,
+
     //头像
     AntDesignOutlined,
 
-    MailOutlined,
     CalendarOutlined,
-    AppstoreOutlined,
     SettingOutlined
   },
   setup() {
@@ -179,29 +231,56 @@ export default defineComponent({
     };
 
 
+    // const state = reactive({
+    //   mode: "inline" as MenuMode,
+    //   theme: "light" as MenuTheme,
+    //   selectedKeys: ["1"],
+    //   openKeys: ["sub1"]
+    // });
+    // const changeMode = (checked: boolean) => {
+    //   state.mode = checked ? "vertical" : "inline";
+    // };
+    // const changeTheme = (checked: boolean) => {
+    //   state.theme = checked ? "dark" : "light";
+    // };
+
     const state = reactive({
-      mode: "inline" as MenuMode,
-      theme: "light" as MenuTheme,
-      selectedKeys: ["1"],
-      openKeys: ["sub1"]
+      collapsed: false,
+      selectedKeys: [],
+      openKeys: [],
+      preOpenKeys: [],
     });
-    const changeMode = (checked: boolean) => {
-      state.mode = checked ? "vertical" : "inline";
+
+    watch(
+      () => state.openKeys,
+      (_val, oldVal) => {
+        state.preOpenKeys = oldVal;
+      },
+    );
+    const toggleCollapsed = () => {
+      state.collapsed = !state.collapsed;
+      state.openKeys = state.collapsed ? [] : state.preOpenKeys;
     };
-    const changeTheme = (checked: boolean) => {
-      state.theme = checked ? "dark" : "light";
-    };
+
     return {
       value,
       onSearch,
       ...toRefs(state),
-      changeMode,
-      changeTheme,
+      // changeMode,
+      // changeTheme,
+      toggleCollapsed,
     };
   },
   provide(){
     return{
       reload: this.reload
+    }
+  },
+  created() {
+    if(this.screenWidth<1025){
+      if(!this.collapsed){
+        this.toggleCollapsed()
+      }
     }
   },
   data(){
@@ -210,14 +289,15 @@ export default defineComponent({
       avatar:"",
       account,
       isRouterAlive:true,
-      screenWidth:document.body.clientWidth
+      screenWidth:document.body.clientWidth,
+      //collapsed:false
     }
   },
   mounted() {
 
     window.onresize = () => {
       return (() => {
-        this.screenWidth = document.body.clientWidth
+        this.screenWidth= document.body.clientWidth
       })()
     }
   },
@@ -226,6 +306,17 @@ export default defineComponent({
       console.log(this.screenWidth)
       if(this.screenWidth<1025){
         console.log("<1025")
+        //this.collapsed=true
+        console.log(this.collapsed)
+        if(!this.collapsed)
+          this.toggleCollapsed()
+        // this.changeMode(false)
+      }else{
+        if(this.collapsed){
+          this.toggleCollapsed()
+        }
+        //this.collapsed=false
+        // this.changeMode(true)
       }
     }
   },
@@ -252,6 +343,9 @@ export default defineComponent({
     },
     CreateArticle(){
       router.push("/create");
+    },
+    test(){
+      router.push("/blank")
     }
   }
 });
