@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <div id="e" >
+    <div id="main" >
     </div>
   </div>
 </template>
@@ -128,7 +128,9 @@ export default {
     }
   },
   mounted () {
-    this.initE();
+    //this.initE();//
+    const editor=new E('#main');
+    editor.create();
   }
 }
 </script>
