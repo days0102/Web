@@ -3,10 +3,14 @@
     <a-input style="width: 99%" v-model:value="title" size="large" placeholder="请输入标题" />
   </div>
   <div class="components-input-demo-size">
-    <a-textarea style="width: 99%;" v-model:value="description" size="large" placeholder="请输入文章表述" />
+    <a-textarea style="width: 99%;" v-model:value="description" size="large" placeholder="请输入简介" />
   </div>
-  <div class="components-input-demo-size">
-    <a-textarea style="width: 99%;" v-model:value="content" placeholder="请输入文章内容" :rows="15" />
+<!--  <div class="components-input-demo-size">-->
+<!--    <a-textarea style="width: 99%;" v-model:value="content" placeholder="请输入文章内容" :rows="15" />-->
+<!--  </div>-->
+  <div v-html="this.content"></div>
+  <div>
+    <WangEditor @acceptEditor="acceptEditor"></WangEditor>
   </div>
   <div>
     <a-button @click="postArticle">提交</a-button>
@@ -14,7 +18,12 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import WangEditor from "../components/WangEditor.vue"
+
 export default defineComponent({
+  components:{
+    WangEditor
+  },
   setup() {
     const title = ref<string>('');
     const description = ref<string>('');
@@ -26,6 +35,12 @@ export default defineComponent({
     };
   },
   methods:{
+    //接受富文本编辑器数据
+    acceptEditor(html: any){
+      console.log(html)
+      this.content=html
+
+    },
     postArticle(){
       if(this.title!="" && this.description!="" && this.content!=""){
         this.axios.post("/api/article/create",{

@@ -127,7 +127,7 @@ export default defineComponent({
       this.axios.get("/api/articles").then((response) => {
         //console.log(response)
         //@ts-ignore
-        if (response.data.status == 0) {
+        if (response.data.status === 0) {
           console.log(response.data.articles);
           if (response.data.articles != null) {
             this.total = (response.data.articles).length;

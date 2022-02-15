@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: antiquewhite; text-align: center">
+  <div style="background-color: antiquewhite;">
 <!--    <h1 style="text-align: center">Detail</h1>-->
 <!--    <h2 style="text-align: center">{{ $route.params }}</h2>-->
 
@@ -10,8 +10,9 @@
 <!--    </template>-->
 <!--    <template v-else>-->
     <h1 style="text-align: center;" >{{this.article.title}}</h1>
-    <p style="text-align: center;font-size: x-large">{{this.article.content}}</p>
-    <a-textarea style="font-size: x-large;background-color: antiquewhite"  readonly="readonly" v-model:value="this.article.content" placeholder="1~200字" :rows="auto" />
+    <div v-html="this.article.content"></div>
+<!--    <p style="text-align: center;font-size: x-large">{{this.article.content}}</p>-->
+<!--    <a-textarea style="font-size: x-large;background-color: antiquewhite"  readonly="readonly" v-model:value="this.article.content" placeholder="1~200字" :rows="auto" />-->
 <!--    </template>-->
   </div>
   <!--  <div style="background-color: aquamarine">-->

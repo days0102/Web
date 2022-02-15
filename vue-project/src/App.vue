@@ -14,7 +14,7 @@
           </a-avatar>
           <a-image v-else
             src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%253A%252F%252Fdingyue.ws.126.net%252F2021%252F0530%252Ff6edf0a2j00qtvxya000cc000hs00ckc.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1646807044&t=5a7b75520cd219996f97fbbecd60bc05"
-            style="width: 100%;height: 80px"></a-image>
+            style="height: 80px"></a-image>
         </div>
         <div>
           <p style="margin: 0">{{account}}</p>
@@ -251,12 +251,12 @@ export default defineComponent({
       preOpenKeys: [],
     });
 
-    watch(
-      () => state.openKeys,
-      (_val, oldVal) => {
-        state.preOpenKeys = oldVal;
-      },
-    );
+    // watch(
+    //   () => state.openKeys,
+    //   (_val, oldVal) => {
+    //     state.preOpenKeys = oldVal;
+    //   },
+    // );
     const toggleCollapsed = () => {
       state.collapsed = !state.collapsed;
       state.openKeys = state.collapsed ? [] : state.preOpenKeys;
@@ -305,7 +305,6 @@ export default defineComponent({
     screenWidth(){
       console.log(this.screenWidth)
       if(this.screenWidth<1025){
-        console.log("<1025")
         //this.collapsed=true
         console.log(this.collapsed)
         if(!this.collapsed)
@@ -339,7 +338,7 @@ export default defineComponent({
     },
     Readarticle() {
       router.push("/article");
-      console.log("Hello");
+      //console.log("Hello");
     },
     CreateArticle(){
       router.push("/create");
