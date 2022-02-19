@@ -27,17 +27,17 @@
           style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;">
           {{ article.description }}</h3>
         <p style="margin-top: 10px">
-          <span v-if="like" style="margin-right: 15px">
+          <span v-if="like" style="margin-right: 15px" @click="liked">
             <LikeFilled @click="" />{{ article.likes }}
           </span>
-          <span v-else style="margin-right: 15px;">
+          <span v-else style="margin-right: 15px;" @click="liked">
             <LikeOutlined @click="" />{{ article.likes }}
           </span>
 
-          <span v-if="dislike" style="margin-right: 15px">
+          <span v-if="dislike" style="margin-right: 15px" @click="disliked">
             <DislikeFilled @click="" />{{ article.stars }}
           </span>
-          <span v-else style="margin-right: 15px">
+          <span v-else style="margin-right: 15px" @click="disliked">
             <DislikeOutlined @click="" />{{ article.stars }}
           </span>
 
@@ -98,11 +98,17 @@ export default defineComponent({
       total: 0,
       pageSize: 3,
       pageShow: 0,
-      like: 0,
-      dislike: 0
+      like: false,
+      dislike: false
     };
   },
   methods: {
+    liked(){
+      this.like=!(this.like)
+    },
+    disliked(){
+
+    },
     handleSizeChange() {
 
     },
